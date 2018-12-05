@@ -42,10 +42,17 @@ class MenuTableViewController: UITableViewController {
         return cell
     }
     
+    /// set cell text and image
     func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
         let menuItem = menuItems[indexPath.row]
         cell.textLabel?.text = menuItem.name
         cell.detailTextLabel?.text = String(format: "$%.2f", menuItem.price)
+        
+//        // make sure large items are visible
+//        cell.textLabel?.numberOfLines = 0
+//        cell.textLabel?.lineBreakMode = .byWordWrapping
+        
+        // get image
         MenuController.shared.fetchImage(url: menuItem.imageURL) { (image) in
             guard let image = image else { return }
             DispatchQueue.main.async {
@@ -59,6 +66,7 @@ class MenuTableViewController: UITableViewController {
             }
         }
     }
+
     
     /// pass information to menu detail controller
     override func prepare(for segue: UIStoryboardSegue, sender:
