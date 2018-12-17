@@ -11,24 +11,19 @@ import UIKit
 class MenuItemDetailViewController: UIViewController {
     var menuItem: MenuItem!
     
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var detailTextLabel: UILabel!
     @IBOutlet weak var addToOrderButton: UIButton!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addToOrderButton.applyDesign()
-        
         updateUI()
-        // Do any additional setup after loading the view.
     }
     
-    
+    /// set details of menu item and get image from API
     func updateUI() {
         titleLabel.text = menuItem.name
         priceLabel.text = String(format: "$%.2f", menuItem.price)
@@ -41,17 +36,14 @@ class MenuItemDetailViewController: UIViewController {
         }
     }
 
-    
+    /// add item to order
     @IBAction func addToOrderButtonTapped(_ sender: UIButton) {
         UIView.animate(withDuration: 0.5) {
             self.addToOrderButton.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
             self.addToOrderButton.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         }
-        
         MenuController.shared.order.menuItems.append(menuItem)
     }
-    
-    
 }
 
 // button design
@@ -62,5 +54,3 @@ extension UIButton {
         self.setTitleColor(UIColor.white, for: .normal)
     }
 }
-
-

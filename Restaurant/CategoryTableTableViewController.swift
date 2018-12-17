@@ -13,7 +13,8 @@ class CategoryTableTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
+        // get data from API
         MenuController.shared.fetchCategories { (categories) in
             if let categories = categories {
                 self.updateUI(with: categories)
@@ -21,8 +22,7 @@ class CategoryTableTableViewController: UITableViewController {
         }
     }
 
-
-    
+    /// update interface
     func updateUI(with categories: [String]) {
         DispatchQueue.main.async {
             self.categories = categories
@@ -40,12 +40,13 @@ class CategoryTableTableViewController: UITableViewController {
         return cell
     }
     
+    /// set cell content
     func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
         let categoryString = categories[indexPath.row]
         cell.textLabel?.text = categoryString.capitalized
     }
     
-    
+    /// pass categories to next controller
     override func prepare(for segue: UIStoryboardSegue, sender:
     Any?) {
         if segue.identifier == "MenuSegue" {

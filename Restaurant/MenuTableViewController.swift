@@ -12,7 +12,6 @@ class MenuTableViewController: UITableViewController {
     var menuItems = [MenuItem]()
     var category: String!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,13 +23,13 @@ class MenuTableViewController: UITableViewController {
         }
     }
 
+    /// reload tableview
     func updateUI(with menuItems: [MenuItem]) {
         DispatchQueue.main.async {
             self.menuItems = menuItems
             self.tableView.reloadData()
         }
     }
-
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count
@@ -48,10 +47,6 @@ class MenuTableViewController: UITableViewController {
         cell.textLabel?.text = menuItem.name
         cell.detailTextLabel?.text = String(format: "$%.2f", menuItem.price)
         
-//        // make sure large items are visible
-//        cell.textLabel?.numberOfLines = 0
-//        cell.textLabel?.lineBreakMode = .byWordWrapping
-        
         // get image
         MenuController.shared.fetchImage(url: menuItem.imageURL) { (image) in
             guard let image = image else { return }
@@ -66,7 +61,6 @@ class MenuTableViewController: UITableViewController {
             }
         }
     }
-
     
     /// pass information to menu detail controller
     override func prepare(for segue: UIStoryboardSegue, sender:
@@ -78,6 +72,4 @@ class MenuTableViewController: UITableViewController {
             menuItemDetailViewController.menuItem = menuItems[index]
         }
     }
-    
-    
 }

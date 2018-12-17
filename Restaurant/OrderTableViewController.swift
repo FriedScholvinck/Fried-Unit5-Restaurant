@@ -11,13 +11,12 @@ import UIKit
 class OrderTableViewController: UITableViewController {
     var orderMinutes = 0
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = editButtonItem
         
+        // add alert notification possibility
         NotificationCenter.default.addObserver(tableView, selector: #selector(UITableView.reloadData), name: MenuController.orderUpdatedNotification, object: nil)
-
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -30,6 +29,7 @@ class OrderTableViewController: UITableViewController {
         return cell
     }
     
+    /// set cell information
     func configure(_ cell: UITableViewCell, forItemAt indexPath: IndexPath) {
         let menuItem = MenuController.shared.order.menuItems[indexPath.row]
         cell.textLabel?.text = menuItem.name
@@ -48,7 +48,6 @@ class OrderTableViewController: UITableViewController {
         }
     }
 
-    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -59,13 +58,13 @@ class OrderTableViewController: UITableViewController {
         }
     }
     
+    /// pop up alert to submit order
     @IBAction func submitTapped(_ sender: UIBarButtonItem) {
         let orderTotal = MenuController.shared.order.menuItems.reduce(0.0) { (result, menuItem) -> Double in
             return result + menuItem.price
         }
         
         let formattedOrder = String(format: "$%.2f", orderTotal)
-        
         let alert = UIAlertController(title: "Confirm Order", message: "You are about to submit your order with a total of \(formattedOrder)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Submit", style: .default) { action in
             self.uploadOrder()
@@ -74,6 +73,7 @@ class OrderTableViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    // sunmit order and get waiting minutes
     func uploadOrder() {
         let menuIds = MenuController.shared.order.menuItems.map { $0.id }
         MenuController.shared.submitOrder(forMenuIDs: menuIds) { (minutes) in
@@ -86,13 +86,14 @@ class OrderTableViewController: UITableViewController {
         }
     }
     
-    
+    /// empty order if canceled
     @IBAction func unwindToOrderList(segue: UIStoryboardSegue) {
         if segue.identifier == "DismissConfirmation" {
             MenuController.shared.order.menuItems.removeAll()
         }
     }
     
+    /// pass info to confirmation controller
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmationSegue" {
             let orderConfirmationViewController = segue.destination as! OrderConfirmationViewController

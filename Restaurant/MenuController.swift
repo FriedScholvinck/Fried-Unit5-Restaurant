@@ -17,16 +17,11 @@ class MenuController {
             NotificationCenter.default.post(name: MenuController.orderUpdatedNotification, object: nil)
         }
     }
-    
     static let orderUpdatedNotification = Notification.Name("MenuController.orderUpdated")
-
-    
 
     /// request GET to categories
     func fetchCategories(completion: @escaping ([String]?) -> Void) {
         let categoryURL = baseURL.appendingPathComponent("categories")
-        
-        // fetch categories
         let task = URLSession.shared.dataTask(with: categoryURL) { (data, response, error) in
             if let data = data, let jsonDictionary = try? JSONSerialization.jsonObject(with: data) as? [String:Any], let categories = jsonDictionary?["categories"] as?[String] {
                 completion(categories)
@@ -37,7 +32,7 @@ class MenuController {
         task.resume()
     }
     
-    /// request GET to menus
+    /// request GET to menu items
     func fetchMenuItems(forCategory categoryName: String, completion: @escaping ([MenuItem]?) -> Void) {
         let initialMenuURL = baseURL.appendingPathComponent("menu")
         var components = URLComponents(url: initialMenuURL, resolvingAgainstBaseURL: true)!
@@ -67,7 +62,7 @@ class MenuController {
         task.resume()
     }
     
-    // POST
+    // POST request to submit order
     func submitOrder(forMenuIDs menuIDs: [Int], completion: @escaping (Int?) -> Void) {
         let orderURL = baseURL.appendingPathComponent("order")
         var request = URLRequest(url: orderURL)
@@ -87,10 +82,5 @@ class MenuController {
             }
         }
         task.resume()
-        
     }
-    
-    
 }
-
-
